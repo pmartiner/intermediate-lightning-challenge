@@ -1,14 +1,14 @@
-import { Lightning, Utils, Colors, Router } from "@lightningjs/sdk";
-import Button from "../components/Button";
-import fontStyles from "../lib/fontStyles";
-import styles from "../lib/styles";
+import { Lightning, Utils, Colors, Router } from '@lightningjs/sdk';
+import Button from '../components/Button';
+import fontStyles from '../lib/fontStyles';
+import styles from '../lib/styles';
 
 class MainMenu extends Lightning.Component {
   static _template() {
     return {
       w: 1920,
       h: 1080,
-      color: Colors("black").get(),
+      color: Colors('black').get(),
       rect: true,
 
       Logo: {
@@ -16,9 +16,9 @@ class MainMenu extends Lightning.Component {
         h: (h) => h * 0.6,
 
         flex: {
-          direction: "column",
-          justifyContent: "center",
-          alignItems: "center",
+          direction: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
         },
 
         Icon: {
@@ -27,16 +27,16 @@ class MainMenu extends Lightning.Component {
 
           texture: {
             type: Lightning.textures.ImageTexture,
-            src: Utils.asset("images/snake.png"),
+            src: Utils.asset('images/snake.png'),
           },
         },
 
         Title: {
           text: {
             ...fontStyles.title,
-            text: "Snake",
-            textColor: Colors("green").get(),
-            textAlign: "center",
+            text: 'Snake',
+            textColor: Colors('green').get(),
+            textAlign: 'center',
           },
         },
       },
@@ -47,19 +47,19 @@ class MainMenu extends Lightning.Component {
         y: (h) => h * 0.15,
 
         flex: {
-          direction: "column",
-          justifyContent: "center",
-          alignItems: "center",
+          direction: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
         },
 
         PlayItem: {
           type: Button,
-          title: "Play",
+          title: 'Play',
         },
 
         HighscoreItem: {
           type: Button,
-          title: "Highscore",
+          title: 'Highscore',
           flexItem: {
             marginTop: styles.spacing.medium,
           },
@@ -70,8 +70,27 @@ class MainMenu extends Lightning.Component {
 
   _index = 0;
 
+  _buttonPressed() {
+    const child = this.tag('Items').children[this._index];
+    if (child._title === 'Play') {
+      Router.navigate('game');
+    } else if (child._title === 'Highscore') {
+      Router.navigate('high-score');
+    }
+  }
+
   _getFocused() {
-    return this.tag("Items").children[this._index];
+    return this.tag('Items').children[this._index];
+  }
+
+  _setup() {
+    this.tag('Items').children.forEach((child) =>
+      child.patch({
+        signals: {
+          buttonPressed: '_buttonPressed',
+        },
+      })
+    );
   }
 
   _handleDown() {

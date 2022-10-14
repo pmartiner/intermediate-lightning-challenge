@@ -1,15 +1,15 @@
-import { Lightning, Colors } from "@lightningjs/sdk";
-import Button from "../components/Button";
-import fontStyles from "../lib/fontStyles";
-import styles from "../lib/styles";
-import { clearHighscores, getHighscores } from "../utils";
+import { Lightning, Colors, Router } from '@lightningjs/sdk';
+import Button from '../components/Button';
+import fontStyles from '../lib/fontStyles';
+import styles from '../lib/styles';
+import { clearHighscores, getHighscores } from '../utils';
 
 class Highscore extends Lightning.Component {
   static _template() {
     return {
       w: 1920,
       h: 1080,
-      color: Colors("black").get(),
+      color: Colors('black').get(),
       rect: true,
 
       Highscores: {
@@ -23,9 +23,9 @@ class Highscore extends Lightning.Component {
           mountX: 0.5,
 
           text: {
-            text: "| Highscores |",
+            text: '| Highscores |',
             ...fontStyles.title,
-            textColor: Colors("green").get(),
+            textColor: Colors('green').get(),
           },
         },
 
@@ -34,8 +34,8 @@ class Highscore extends Lightning.Component {
           x: 960,
           mountX: 0.5,
           flex: {
-            direction: "column",
-            alignItems: "center",
+            direction: 'column',
+            alignItems: 'center',
           },
         },
       },
@@ -47,14 +47,14 @@ class Highscore extends Lightning.Component {
         x: 0,
 
         flex: {
-          direction: "column",
-          justifyContent: "center",
-          alignItems: "center",
+          direction: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
         },
 
         PlayAgain: {
           type: Button,
-          title: "Play Again",
+          title: 'Play Again',
         },
 
         GoBackHome: {
@@ -62,7 +62,7 @@ class Highscore extends Lightning.Component {
           flexItem: {
             marginTop: styles.spacing.medium,
           },
-          title: "Home",
+          title: 'Home',
         },
 
         ClearHighscores: {
@@ -70,7 +70,7 @@ class Highscore extends Lightning.Component {
           flexItem: {
             marginTop: styles.spacing.medium,
           },
-          title: "Clear Highscores",
+          title: 'Clear Highscores',
         },
       },
     };
@@ -81,8 +81,8 @@ class Highscore extends Lightning.Component {
   _handleDown() {
     this.index++;
 
-    if (this.index >= this.tag("Buttons").children.length) {
-      this.index = this.tag("Buttons").children.length - 1;
+    if (this.index >= this.tag('Buttons').children.length) {
+      this.index = this.tag('Buttons').children.length - 1;
     }
   }
 
@@ -95,7 +95,28 @@ class Highscore extends Lightning.Component {
   }
 
   _getFocused() {
-    return this.tag("Buttons").children[this.index];
+    return this.tag('Buttons').children[this.index];
+  }
+
+  _buttonPressed() {
+    const child = this.tag('Buttons').children[this.index];
+    if (child._title === 'Play Again') {
+      Router.navigate('game');
+    } else if (child._title === 'Home') {
+      Router.navigate('main-menu');
+    } else if (child._title === 'Clear Highscores') {
+      this.clearScores();
+    }
+  }
+
+  _setup() {
+    this.tag('Buttons').children.forEach((child) =>
+      child.patch({
+        signals: {
+          buttonPressed: '_buttonPressed',
+        },
+      })
+    );
   }
 
   _active() {
@@ -105,12 +126,12 @@ class Highscore extends Lightning.Component {
   _renderHighscores() {
     const highscores = getHighscores();
 
-    this.tag("HighscoreItems").children = highscores.map((highscore, index) => {
+    this.tag('HighscoreItems').children = highscores.map((highscore, index) => {
       return {
         text: {
           text: `${index + 1}. ${highscore.date} - ${highscore.score}`,
           ...fontStyles.menuItem,
-          textColor: Colors("white").get(),
+          textColor: Colors('white').get(),
         },
       };
     });

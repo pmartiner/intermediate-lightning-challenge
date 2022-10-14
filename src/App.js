@@ -17,22 +17,28 @@
  * limitations under the License.
  */
 
-import { Lightning, Utils } from "@lightningjs/sdk";
-import colors from "./lib/colors";
+import { Utils, Router } from '@lightningjs/sdk';
+import colors from './lib/colors';
 
-export default class App extends Lightning.Component {
+// Router
+import router from './router';
+
+export default class App extends Router.App {
   static getFonts() {
-    return [
-      { family: "Regular", url: Utils.asset("fonts/Roboto-Regular.ttf") },
-    ];
+    return [{ family: 'Regular', url: Utils.asset('fonts/Roboto-Regular.ttf') }];
   }
 
   static colors() {
     return colors;
   }
 
+  _setup() {
+    Router.startRouter(router);
+  }
+
   static _template() {
     return {
+      ...super._template(),
       w: 1920,
       h: 1080,
 

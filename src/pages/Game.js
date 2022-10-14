@@ -1,14 +1,14 @@
-import { Lightning, Colors, Router } from "@lightningjs/sdk";
-import fontStyles from "../lib/fontStyles";
-import GameEngine, { Directions } from "../lib/game";
-import styles from "../lib/styles";
+import { Lightning, Colors, Router } from '@lightningjs/sdk';
+import fontStyles from '../lib/fontStyles';
+import GameEngine, { Directions } from '../lib/game';
+import styles from '../lib/styles';
 
 class Game extends Lightning.Component {
   static _template() {
     return {
       w: 1920,
       h: 1080,
-      color: Colors("black").get(),
+      color: Colors('black').get(),
       rect: true,
 
       GameItems: {
@@ -23,8 +23,8 @@ class Game extends Lightning.Component {
         mountX: 1,
         text: {
           ...fontStyles.title,
-          text: "Score: 0",
-          textAlign: "right",
+          text: 'Score: 0',
+          textAlign: 'right',
         },
       },
     };
@@ -60,14 +60,14 @@ class Game extends Lightning.Component {
       color: Colors(food.color).get(),
     });
 
-    this.tag("GameItems").children = children;
+    this.tag('GameItems').children = children;
 
-    this.tag("Score").text = `Score: ${score}`;
+    this.tag('Score').text = `Score: ${score}`;
   }
 
   gameEndHandler() {
     this.game = null;
-    Router.navigate("highscore");
+    Router.navigate('high-score');
   }
 
   // Hint: Use this method to start the game
@@ -87,6 +87,14 @@ class Game extends Lightning.Component {
       this.game.disableGameLoop();
       this.game = null;
     }
+  }
+
+  _setup() {
+    this.startGame();
+  }
+
+  _inactive() {
+    this.endGame();
   }
 
   _handleUp() {
