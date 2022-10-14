@@ -55,13 +55,21 @@ class MainMenu extends Lightning.Component {
         PlayItem: {
           type: Button,
           title: 'Play',
+          navigateTo: 'game',
+          signals: {
+            buttonPressed: '_buttonPressed',
+          },
         },
 
         HighscoreItem: {
           type: Button,
           title: 'Highscore',
+          navigateTo: 'high-score',
           flexItem: {
             marginTop: styles.spacing.medium,
+          },
+          signals: {
+            buttonPressed: '_buttonPressed',
           },
         },
       },
@@ -70,27 +78,12 @@ class MainMenu extends Lightning.Component {
 
   _index = 0;
 
-  _buttonPressed() {
-    const child = this.tag('Items').children[this._index];
-    if (child._title === 'Play') {
-      Router.navigate('game');
-    } else if (child._title === 'Highscore') {
-      Router.navigate('high-score');
-    }
+  _buttonPressed(navigateTo) {
+    Router.navigate(navigateTo);
   }
 
   _getFocused() {
     return this.tag('Items').children[this._index];
-  }
-
-  _setup() {
-    this.tag('Items').children.forEach((child) =>
-      child.patch({
-        signals: {
-          buttonPressed: '_buttonPressed',
-        },
-      })
-    );
   }
 
   _handleDown() {

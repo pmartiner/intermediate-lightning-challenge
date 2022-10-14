@@ -55,6 +55,10 @@ class Highscore extends Lightning.Component {
         PlayAgain: {
           type: Button,
           title: 'Play Again',
+          navigateTo: 'game',
+          signals: {
+            buttonPressed: '_buttonPressed',
+          },
         },
 
         GoBackHome: {
@@ -63,6 +67,10 @@ class Highscore extends Lightning.Component {
             marginTop: styles.spacing.medium,
           },
           title: 'Home',
+          navigateTo: 'main-menu',
+          signals: {
+            buttonPressed: '_buttonPressed',
+          },
         },
 
         ClearHighscores: {
@@ -71,6 +79,10 @@ class Highscore extends Lightning.Component {
             marginTop: styles.spacing.medium,
           },
           title: 'Clear Highscores',
+          navigateTo: 'Reset high scores',
+          signals: {
+            goToHighScores: '_goToHighScores',
+          },
         },
       },
     };
@@ -98,25 +110,12 @@ class Highscore extends Lightning.Component {
     return this.tag('Buttons').children[this.index];
   }
 
-  _buttonPressed() {
-    const child = this.tag('Buttons').children[this.index];
-    if (child._title === 'Play Again') {
-      Router.navigate('game');
-    } else if (child._title === 'Home') {
-      Router.navigate('main-menu');
-    } else if (child._title === 'Clear Highscores') {
-      this.clearScores();
-    }
+  _buttonPressed(navigateTo) {
+    Router.navigate(navigateTo);
   }
 
-  _setup() {
-    this.tag('Buttons').children.forEach((child) =>
-      child.patch({
-        signals: {
-          buttonPressed: '_buttonPressed',
-        },
-      })
-    );
+  _goToHighScores() {
+    this.clearScores();
   }
 
   _active() {
