@@ -89,7 +89,7 @@ class Game extends Lightning.Component {
     }
   }
 
-  _setup() {
+  _active() {
     this.startGame();
   }
 
